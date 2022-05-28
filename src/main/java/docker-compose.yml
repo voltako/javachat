@@ -1,0 +1,50 @@
+version: "3.9"
+services:
+  server:
+    build: Server/
+    command: [ "java","-jar","server-1.jar"]
+    ports:
+      - 5050:5050
+    networks:
+      app_network:
+        ipv4_address: 192.28.0.2
+
+  client:
+    build: Client/
+    command: ["java","-jar","client-1.jar"]
+    networks:
+      app_network:
+        ipv4_address: 192.28.0.3
+
+    depends_on:
+      - server
+  client1:
+    build: Client/
+    command: [ "java","-jar","client-1.jar" ]
+    networks:
+      app_network:
+        ipv4_address: 192.28.0.4
+
+
+    depends_on:
+      - server
+
+  client2:
+    build: Client/
+    command: [ "java","-jar","client-1.jar" ]
+    networks:
+      app_network:
+        ipv4_address: 192.28.0.5
+
+
+    depends_on:
+      - server
+
+networks:
+  app_network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.28.0.0/16
+          gateway: 192.28.0.1
